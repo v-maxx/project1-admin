@@ -1,8 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import {Link, Product, User} from "./models";
-import { connectToDB } from "./utils";
 import { redirect } from "next/navigation";
 import bcrypt from "bcrypt";
 import { signIn } from "../auth";
@@ -10,16 +8,25 @@ import {cookies} from "next/headers";
 import mongoose from "mongoose";
 import {authConfig} from "@/app/authconfig";
 import { auth } from "../auth"
+import {toast} from "react-toastify";
+import {connectToDB} from "@/app/lib/utils";
+import {revalidatePath} from "next/cache";
 
 
 const secret = process.env.AUTH_SECRET;
 
 export const addUser = async (formData) => {
-  const { username, email, password, phone, address, isAdmin, isActive } =
-    Object.fromEntries(formData);
-
   try {
-    connectToDB();
+    // Validate that formData is an instance of FormData
+    if (!(formData instanceof FormData)) {
+      throw new Error('Invalid form data');
+    }
+
+    // Convert formData to an object
+    const formDataObject = Object.fromEntries(formData.entries());
+    const { username, email, password, phone, isAdmin, isActive } = formDataObject;
+
+    await connectToDB();
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -29,21 +36,29 @@ export const addUser = async (formData) => {
       email,
       password: hashedPassword,
       phone,
-      address,
-      isAdmin,
-      isActive,
+      isAdmin: isAdmin === 'true', // Ensure isAdmin is boolean
+      isActive: isActive === 'true', // Ensure isActive is boolean
     });
 
     await newUser.save();
+
+    revalidatePath("/dashboard/users");
+
   } catch (err) {
-    console.log(err);
-    throw new Error("Failed to create user!");
+    if (err.code === 11000) {
+      const field = Object.keys(err.keyPattern)[0];
+      const duplicateValue = err.keyValue[field];
+      throw new Error(`${field}: "${duplicateValue}" already exists.`);
+    } else {
+      console.error(err);
+      throw new Error("Failed to create user!");
+    }
   }
 
-  revalidatePath("/dashboard/users");
-  redirect("/dashboard/users");
-};
 
+
+
+};
 export const updateUser = async (formData) => {
   const { id, username, email, password, phone, address, isAdmin, isActive } =
     Object.fromEntries(formData);
@@ -69,7 +84,7 @@ export const updateUser = async (formData) => {
     await User.findByIdAndUpdate(id, updateFields);
   } catch (err) {
     console.log(err);
-    throw new Error("Failed to update user!");
+    throw Error ("Failed to update user!");
   }
 
   revalidatePath("/dashboard/users");
@@ -189,6 +204,19 @@ export const deleteProduct = async (formData) => {
   }
 
   revalidatePath("/dashboard/products");
+};
+export const deleteLink = async (formData) => {
+  const { id } = Object.fromEntries(formData);
+
+  try {
+    connectToDB();
+    await Link.findByIdAndDelete(id);
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to delete Link!");
+  }
+
+  revalidatePath("/dashboard/links");
 };
 
 export const authenticate = async (prevState, formData) => {

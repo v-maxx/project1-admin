@@ -4,7 +4,7 @@ import { connectToDB } from "./utils";
 export const fetchUsers = async (q, page) => {
   const regex = new RegExp(q, "i");
 
-  const ITEM_PER_PAGE = 2;
+  const ITEM_PER_PAGE = 10;
 
   try {
     connectToDB();
@@ -97,7 +97,7 @@ export const cards = [
   },
   {
     id: 2,
-    title: "Stock",
+    title: "Active Links",
     number: 8.236,
     change: -2,
   },

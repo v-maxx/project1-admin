@@ -26,14 +26,19 @@ const Pagination = ({ count }) => {
   return (
     <div className={styles.container}>
       <button
-        className={styles.button}
+        className={`${styles.button} bg-purple-500 rounded-lg !px-3 !py-2`}
         disabled={!hasPrev}
         onClick={() => handleChangePage("prev")}
       >
         Previous
       </button>
+        <div className={'flex flex-1 justify-end items-center px-4'}>
+            <p>Total Results: {count}</p>
+
+        </div>
+
       <button
-        className={styles.button}
+        className={`${styles.button} bg-purple-500 rounded-lg !px-3 !py-2`}
         disabled={!hasNext}
         onClick={() => handleChangePage("next")}
       >
