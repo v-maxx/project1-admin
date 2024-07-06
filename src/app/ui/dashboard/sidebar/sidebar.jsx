@@ -29,6 +29,11 @@ const menuItems = [
         path: "/dashboard/users",
         icon: <MdSupervisedUserCircle />,
       },
+      {
+        title: "Admins",
+        path: "/dashboard/admins",
+        icon: <MdSupervisedUserCircle />,
+      },
       // {
       //   title: "Products",
       //   path: "/dashboard/products",
@@ -40,7 +45,7 @@ const menuItems = [
         icon: <MdShoppingBag />,
       },
       // {
-      //   title: "Transactions",
+      //   title: "Usersummry",
       //   path: "/dashboard/transactions",
       //   icon: <MdAttachMoney />,
       // },
@@ -69,11 +74,11 @@ const menuItems = [
   {
     title: "User",
     list: [
-      {
-        title: "Settings",
-        path: "/dashboard/settings",
-        icon: <MdOutlineSettings />,
-      },
+      // {
+      //   title: "Settings",
+      //   path: "/dashboard/settings",
+      //   icon: <MdOutlineSettings />,
+      // },
       // {
       //   title: "Help",
       //   path: "/dashboard/help",
@@ -98,9 +103,9 @@ const Sidebar = async () => {
           height="50"
         />
         <div className={styles.userDetail}>
-          <span className={styles.username}>{user?.email}</span>
+          {/*<span className={styles.username}>{user?.email}</span>*/}
           <span className={styles.username}>{user?.username ?? 'unknown'}</span>
-          <span className={styles.userTitle}>Administrator</span>
+          <span className={styles.userTitle}>{user?.role}</span>
         </div>
       </div>
       <ul className={styles.list}>

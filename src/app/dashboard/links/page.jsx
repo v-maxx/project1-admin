@@ -4,8 +4,7 @@ import styles from "@/app/ui/dashboard/products/products.module.css";
 import Search from "@/app/ui/dashboard/search/search";
 import Pagination from "@/app/ui/dashboard/pagination/pagination";
 import {fetchLinks} from "@/app/lib/data";
-import {deleteLink, deleteProduct} from "@/app/lib/actions";
-import {MdContentCopy} from "react-icons/md";
+import {deleteLink} from "@/app/lib/actions";
 
 
 const LinksPage = async ({ searchParams }) => {

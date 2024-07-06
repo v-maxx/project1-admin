@@ -1,31 +1,12 @@
-
-import { updateUser} from "@/app/lib/actions";
+import { updateUser } from "@/app/lib/actions";
 import { fetchUser } from "@/app/lib/data";
 import styles from "@/app/ui/dashboard/users/singleUser/singleUser.module.css";
 import Image from "next/image";
 
-const SingleUserPage = async ({ params }) => {
-  const {id} = params;
-    const user = await fetchUser(id);
+const SingleAdminPage = async ({ params }) => {
 
-
-
-  // const handleUpdateUser = async (event) => {
-  //   event.preventDefault();
-  //   setLoading(true);
-  //   const formData = new FormData(event.target);
-  //
-  //   try {
-  //     await updateUser(formData);
-  //     toast.success("User updated successfully!");
-  //     router.replace("/dashboard/users");
-  //   } catch (err) {
-  //     toast.error(err.message ?? "Something went wrong");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-  //
+  const { id } = params;
+  const user = await fetchUser(id);
 
   return (
     <div className={styles.container}>
@@ -39,24 +20,24 @@ const SingleUserPage = async ({ params }) => {
         <form action={updateUser} className={styles.form}>
           <input type="hidden" name="id" value={user.id}/>
           <label>Username</label>
-          <input type="text" name="username" disabled placeholder={user.username} />
+          <input type="text" name="username" placeholder={user.username} />
           <label>Email</label>
-          <input type="email" name="email" disabled placeholder={user.email} />
+          <input type="email" name="email" placeholder={user.email} />
           <label>Password</label>
-          <input type="password" name="password" placeholder={user.password} />
+          <input type="password" name="password" />
           <label>Phone</label>
           <input type="text" name="phone" placeholder={user.phone} />
           <label>Address</label>
           <textarea type="text" name="address" placeholder={user.address} />
           <label>Role</label>
           <select name="role" id="role" defaultValue={user.role}>
-            <option value={'User'}>User</option>
-            <option value={'Admin'}>Admin</option>
+            <option value={'User'} selected={user.role==='User'}>User</option>
+            <option value={'Admin'} selected={user.role==='Admin'}>Admin</option>
           </select>
           <label>Is Active?</label>
           <select name="isActive" id="isActive" defaultValue={user.isActive}>
-            <option value={true} >Yes</option>
-            <option value={false} >No</option>
+            <option value={true} selected={user.isActive}>Yes</option>
+            <option value={false} selected={!user.isActive}>No</option>
           </select>
           <button>Update</button>
         </form>
@@ -65,4 +46,4 @@ const SingleUserPage = async ({ params }) => {
   );
 };
 
-export default SingleUserPage;
+export default SingleAdminPage;

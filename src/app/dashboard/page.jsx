@@ -6,11 +6,14 @@ import Rightbar from "../ui/dashboard/rightbar/rightbar";
 import Transactions from "../ui/dashboard/transactions/transactions";
 import { fetchUsers } from "@/app/lib/data";
 import {fetchLinks} from "@/app/lib/data";
+import Usersummry from "@/app/ui/dashboard/user-summry/usersummry";
 const Dashboard = async () => {
     // const q = searchParams?.q || "";
     // const page = searchParams?.page || 1;
     const { count:linkCount, links } = await fetchLinks('', 1);
     const { count:userCount, users } = await fetchUsers('', 1);
+
+    console.log('users',users)
   return (
     <div className={styles.wrapper}>
       <div className={styles.main}>
@@ -20,8 +23,9 @@ const Dashboard = async () => {
             <Card count={linkCount} type={'Link'} />
 
         </div>
-        <Transactions />
-        <Chart />
+        {/*<Transactions />*/}
+        <Usersummry users={users} />
+        {/*<Chart />*/}
       </div>
       {/*<div className={styles.side}>*/}
       {/*  <Rightbar />*/}
