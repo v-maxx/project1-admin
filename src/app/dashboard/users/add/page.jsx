@@ -52,8 +52,8 @@ const AddUserPage = () => {
 
           <div className={'flex justify-start items-center align-middle content-center gap-2 py-2'}>
             <label htmlFor="role">Role</label>
-            <select defaultValue="true" name="role" id="role">
-              <option value="true">User</option>
+            <select defaultValue="User" name="role" id="role">
+              <option value="User">User</option>
             </select>
           </div>
 

@@ -52,7 +52,7 @@ const AddAdminPage = () => {
 
           <div className={'flex justify-start items-center gap-2 py-2'}>
             <label htmlFor="rol">Role</label>
-            <select defaultValue="true" name="role" id="role">
+            <select defaultValue="Admin" name="role" id="role">
               <option value="Admin">Admin</option>
               {/*<option value="User">User</option>*/}
             </select>
