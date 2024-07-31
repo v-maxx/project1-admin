@@ -4,6 +4,8 @@ import { authConfig } from "./authconfig";
 import { connectToDB } from "./lib/utils";
 import { User } from "./lib/models";
 import bcrypt from "bcrypt";
+import {revalidatePath} from "next/cache";
+import {redirect} from "next/navigation";
 
 const login = async (credentials) => {
   try {
@@ -20,6 +22,7 @@ const login = async (credentials) => {
     if (!isPasswordCorrect) throw new Error("Wrong credentials!");
 
     return user;
+
   } catch (err) {
     console.log(err);
     throw new Error("Failed to login!");
@@ -34,6 +37,7 @@ export const { signIn, signOut, auth } = NextAuth({
         try {
           const user = await login(credentials);
           return user;
+
         } catch (err) {
           return null;
         }

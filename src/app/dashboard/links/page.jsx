@@ -4,7 +4,9 @@ import styles from "@/app/ui/dashboard/products/products.module.css";
 import Search from "@/app/ui/dashboard/search/search";
 import Pagination from "@/app/ui/dashboard/pagination/pagination";
 import {fetchLinks} from "@/app/lib/data";
-import {deleteLink} from "@/app/lib/actions";
+import {deleteLink, updateLink} from "@/app/lib/actions";
+import TaskActiveToggleSwitch from "@/components/TaskActiveToggleSwitch";
+
 
 
 const LinksPage = async ({ searchParams }) => {
@@ -12,7 +14,6 @@ const LinksPage = async ({ searchParams }) => {
   const page = searchParams?.page || 1;
   // const { count, products } = await fetchProducts(q, page);
   const { count, links } = await fetchLinks(q, page);
-    console.log('links==',links)
   return (
     <div className={styles.container}>
       <div className={`${styles.top} mb-3`}>
@@ -27,6 +28,8 @@ const LinksPage = async ({ searchParams }) => {
             <td>Link url</td>
             <td>Created By</td>
             <td>Created At</td>
+            <td>Reward</td>
+            <td>is Active</td>
 
             <td>Action</td>
           </tr>
@@ -57,6 +60,10 @@ const LinksPage = async ({ searchParams }) => {
               </td>
               <td>{link?.user?.email}</td>
               <td>{link.createdAt?.toString().slice(4, 16)}</td>
+                <td>{link?.reward}</td>
+                <td>
+                  <TaskActiveToggleSwitch id={link?._id} active={link?.isActive}/>
+                </td>
               {/*<td>{product.stock}</td>*/}
               <td>
                 <div className={styles.buttons}>

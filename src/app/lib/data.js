@@ -37,7 +37,6 @@ export const fetchUser = async (id) => {
   try {
     connectToDB();
     const user = await User.findById(id);
-    console.log('fetched user by id',user);
     return user;
   } catch (err) {
     console.log(err);
@@ -64,6 +63,7 @@ export const fetchLinks = async (q, page) => {
         .limit(ITEM_PER_PAGE)
         .skip(ITEM_PER_PAGE * (page - 1));
 
+    console.log('links found',links)
     return { count, links};
   } catch (err) {
     console.log(err);

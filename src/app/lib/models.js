@@ -41,11 +41,26 @@ const linksSchema = new mongoose.Schema(
         url: {
             type: String,
         },
+        reward: {
+            type: Number,
+            required: true,
+
+        },
         uuid: {
             type: String,
             required: true,
             unique: true,
             default: () => new mongoose.Types.ObjectId().toString(), // Generate a unique key
+        },
+        isActive:{
+            type: Boolean,
+            required: true,
+            default:true
+        },
+        completedBy:{
+            type: Array,
+            required: false,
+            default:[]
         },
         user: {
             type: mongoose.Schema.Types.ObjectId,
@@ -53,7 +68,7 @@ const linksSchema = new mongoose.Schema(
             required: true,
         },
     },
-    { timestamps: true, autoIndex: true }
+    { timestamps: true, autoIndex: true}
 );
 
 export const User = mongoose.models.User || mongoose.model("User", userSchema);

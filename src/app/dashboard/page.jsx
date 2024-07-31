@@ -13,7 +13,6 @@ const Dashboard = async () => {
     const { count:linkCount, links } = await fetchLinks('', 1);
     const { count:userCount, users } = await fetchUsers('', 1);
 
-    console.log('users',users)
   return (
     <div className={styles.wrapper}>
       <div className={styles.main}>
