@@ -10,9 +10,12 @@ import {redirect} from "next/navigation";
 const login = async (credentials) => {
   try {
     connectToDB();
-    const user = await User.findOne({ username: credentials.username });
+    const user = await User.findOne({$or: [
+        { username: credentials.username },
+        { email: credentials.username }
+      ]  });
 
-    if (!user) throw new Error("Wrong credentials!");
+    if (!user) throw new Error("User not Found");
 
     const isPasswordCorrect = await bcrypt.compare(
       credentials.password,
