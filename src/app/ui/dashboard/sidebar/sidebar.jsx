@@ -44,11 +44,27 @@ const menuItems = [
         path: "/dashboard/links",
         icon: <MdShoppingBag />,
       },
-      // {
-      //   title: "Usersummry",
-      //   path: "/dashboard/transactions",
-      //   icon: <MdAttachMoney />,
-      // },
+      {
+        title: "Withdrawals",
+        icon: <MdAttachMoney />,
+        path: "/dashboard/withdraw-requests",
+        // sebMenu: [
+        //   {
+        //     title: "Pending",
+        //     path: "/dashboard/withdraw-requests",
+        //     icon: <MdDashboard />,
+        //   },
+        //   {
+        //     title: "Completed",
+        //     path: "/dashboard/withdraw-requests",
+        //     icon: <MdSupervisedUserCircle />,
+        //   },
+        //   {
+        //     title: "Rejected",
+        //     path: "/dashboard/withdraw-requests",
+        //     icon: <MdSupervisedUserCircle />,
+        //   },]
+      },
     ],
   },
   // {
@@ -111,6 +127,7 @@ const Sidebar = async () => {
           <li key={cat.title}>
             <span className={styles.cat}>{cat.title}</span>
             {cat.list.map((item) => (
+                // item.subMenu &&
               <MenuLink item={item} key={item.title} />
             ))}
           </li>

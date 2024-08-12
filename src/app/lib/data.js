@@ -1,4 +1,4 @@
-import { User,Link } from "./models";
+import {User, Link, Withdrawal} from "./models";
 import { connectToDB } from "./utils";
 
 export const fetchUsers = async (q, page) => {
@@ -16,6 +16,49 @@ export const fetchUsers = async (q, page) => {
     throw new Error("Failed to fetch users!");
   }
 };
+export const fetchWithdrawRequests = async (page) => {
+  const ITEM_PER_PAGE = 10;
+  try {
+    await connectToDB(); // Ensure the connection is awaited
+    const count = await Withdrawal.find({ status: 'Pending' }).countDocuments();
+    const pendingRequests = await Withdrawal.find({ status: 'Pending' })
+        .populate('requestedBy', 'email password isActive phone role accounts') // Select specific fields
+        .limit(ITEM_PER_PAGE)
+        .skip(ITEM_PER_PAGE * (page - 1));
+
+    // Calculate the total amount
+    const totalAmount = pendingRequests.reduce((total, request) => {
+      return total + parseFloat(request.amount);
+    }, 0);
+
+    return { count, pendingRequests, totalAmount };
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to fetch Requests!");
+  }
+};
+
+export const fetchWithdrawalTotal = async (page) => {
+  const ITEM_PER_PAGE = 10;
+  try {
+    await connectToDB(); // Ensure the connection is awaited
+    const count = await Withdrawal.find({ status: 'Pending' }).countDocuments();
+    const paidRequests = await Withdrawal.find({ status: 'Completed' })
+        .populate('requestedBy', 'email isActive phone role accounts') // Populate the requestedBy field with user details
+        .limit(ITEM_PER_PAGE)
+        .skip(ITEM_PER_PAGE * (page - 1));
+
+    const totalSettledAmount = paidRequests.reduce((total, request) => {
+      return total + parseFloat(request.amount);
+    }, 0);
+    return { count, paidRequests,totalSettledAmount };
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to fetch Requests!");
+  }
+};
+
+
 export const fetchAdmins = async (q, page) => {
   const regex = new RegExp(q, "i");
   const ITEM_PER_PAGE = 10;
@@ -41,6 +84,19 @@ export const fetchUser = async (id) => {
   } catch (err) {
     console.log(err);
     throw new Error("Failed to fetch user!");
+  }
+};
+export const fetchRequest = async (id) => {
+
+  try {
+    connectToDB();
+    const request = await Withdrawal.findById(id)
+        .populate('requestedBy', 'email isActive phone role accounts') ;
+    console.log('request--',request)
+    return request;
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to fetch Request!");
   }
 };
 
@@ -71,36 +127,3 @@ export const fetchLinks = async (q, page) => {
   }
 };
 
-export const fetchProduct = async (id) => {
-  try {
-    connectToDB();
-    const product = await Product.findById(id);
-    return product;
-  } catch (err) {
-    console.log(err);
-    throw new Error("Failed to fetch product!");
-  }
-};
-
-// DUMMY DATA
-
-export const cards = [
-  {
-    id: 1,
-    title: "Total Users",
-    number: 10.928,
-    change: 12,
-  },
-  {
-    id: 2,
-    title: "Active Links",
-    number: 8.236,
-    change: -2,
-  },
-  {
-    id: 3,
-    title: "Revenue",
-    number: 6.642,
-    change: 18,
-  },
-];

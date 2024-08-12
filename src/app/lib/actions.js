@@ -1,5 +1,5 @@
 "use server";
-import {Link, User} from "./models";
+import {Link, User, Withdrawal} from "./models";
 import {redirect} from "next/navigation";
 import bcrypt from "bcrypt";
 import {signIn} from "../auth";
@@ -147,6 +147,58 @@ export const updateUser = async (formData) => {
     revalidatePath("/dashboard/users");
     redirect("/dashboard/users");
 };
+export const updateWithdrawRequest = async (action, withdrawalId) => {
+    try {
+        await connectToDB();
+
+        // Find the withdrawal request
+        const withdrawal = await Withdrawal.findById(withdrawalId);
+        if (!withdrawal) {
+            throw new Error('Withdrawal request not found!');
+        }
+
+        const userId = withdrawal.requestedBy;
+        const amount = parseFloat(withdrawal.amount);
+
+        // Initialize update fields
+        const updateFields = {};
+
+        if (action === 'approve') {
+            updateFields.status = 'Completed';
+
+            // Update the user's payout fields
+            await User.findByIdAndUpdate(userId, {
+                $inc: {
+                    'payout.pending': -amount,
+                    'payout.settled': amount,
+                },
+            });
+        } else if (action === 'reject') {
+            updateFields.status = 'Rejected';
+
+            // Update the user's payout fields
+            await User.findByIdAndUpdate(userId, {
+                $inc: {
+                    'payout.pending': -amount,
+                    'payout.available': amount,
+                },
+            });
+        }
+
+        // Update the withdrawal request's status
+        await Withdrawal.findByIdAndUpdate(withdrawalId, updateFields, { new: true });
+
+        // Revalidate and redirect to the withdraw requests page
+
+    } catch (err) {
+        console.log('Error in update:', err);
+        throw new Error('Failed to update withdrawal request!');
+    }finally {
+        revalidatePath('/dashboard/withdraw-requests');
+        redirect('/dashboard/withdraw-requests');
+    }
+};
+
 
 export const addLink = async (formData) => {
     // const cookieStore = cookies();

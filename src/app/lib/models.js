@@ -106,7 +106,7 @@ const withdrawalSchema = new mongoose.Schema(
             unique: true,
             default: () => new mongoose.Types.ObjectId().toString(), // Generate a unique key
         },
-        status:{ type: String, enum: ['Pending', 'In-Progress', 'Completed'], default: 'Pending' },
+        status:{ type: String, enum: ['Pending', 'Rejected', 'Completed'], default: 'Pending' },
         requestedBy: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
