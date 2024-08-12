@@ -54,12 +54,12 @@ const WithdrawRequestsPage = async ({ searchParams }) => {
                       View
                     </button>
                   </Link>
-                  <form action={deleteUser}>
-                    <input type="hidden" name="id" value={(request.id)} />
-                    <button className={`${styles.button} ${styles.delete}`}>
-                      Delete
-                    </button>
-                  </form>
+                  {/*<form action={deleteUser}>*/}
+                  {/*  <input type="hidden" name="id" value={(request.id)} />*/}
+                  {/*  <button className={`${styles.button} ${styles.delete}`}>*/}
+                  {/*    Delete*/}
+                  {/*  </button>*/}
+                  {/*</form>*/}
                 </div>
               </td>
             </tr>
