@@ -5,7 +5,7 @@ const Usersummry = ({users}) => {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Users</h2>
+      <h2 className={styles.title}>Volunteers</h2>
       <table className={styles.table}>
         <thead>
           <tr>
@@ -35,7 +35,7 @@ const Usersummry = ({users}) => {
               </span>
           </td>
 
-          <td>{user.isAdmin ? "Admin" : "User"}</td>
+          <td>{user.isAdmin ? "Admin" : "Volunteer"}</td>
           {/*<td>$3.200</td>*/}
         </tr>)}
 

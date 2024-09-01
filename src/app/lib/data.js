@@ -1,4 +1,4 @@
-import {User, Link, Withdrawal} from "./models";
+import {User,Application} from "./models";
 import { connectToDB } from "./utils";
 
 export const fetchUsers = async (q, page) => {
@@ -6,8 +6,8 @@ export const fetchUsers = async (q, page) => {
   const ITEM_PER_PAGE = 10;
   try {
     connectToDB();
-    const count = await User.find({ username: { $regex: regex },role:'User' }).count();
-    const users = await User.find({ username: { $regex: regex },role:'User' })
+    const count = await User.find({ username: { $regex: regex },role:'Volunteer' }).count();
+    const users = await User.find({ username: { $regex: regex },role:'Volunteer' })
       .limit(ITEM_PER_PAGE)
       .skip(ITEM_PER_PAGE * (page - 1));
     return { count, users };
@@ -16,22 +16,65 @@ export const fetchUsers = async (q, page) => {
     throw new Error("Failed to fetch users!");
   }
 };
-export const fetchWithdrawRequests = async (page) => {
+// export const fetchApplications = async (page) => {
+//   const ITEM_PER_PAGE = 10;
+//   try {
+//     await connectToDB(); // Ensure the connection is awaited
+//     const count = await Application.find().countDocuments();
+//     const pendingRequests = await Application.find()
+//         .populate('initiatedBy', 'email password isActive phone role') // Select specific fields
+//         .limit(ITEM_PER_PAGE)
+//         .skip(ITEM_PER_PAGE * (page - 1));
+//
+//     // Calculate the total amount
+//
+//
+//     return { count, pendingRequests };
+//   } catch (err) {
+//     console.log(err);
+//     throw new Error("Failed to fetch Requests!");
+//   }
+// };
+export const fetchApplications = async (page, specificDate) => {
   const ITEM_PER_PAGE = 10;
   try {
     await connectToDB(); // Ensure the connection is awaited
-    const count = await Withdrawal.find({ status: 'Pending' }).countDocuments();
-    const pendingRequests = await Withdrawal.find({ status: 'Pending' })
-        .populate('requestedBy', 'email password isActive phone role accounts') // Select specific fields
+
+    const countQuery = Application.find();
+
+    // If a specific date is provided, filter by the 'createdAt' field
+    if (specificDate) {
+      const startOfDay = new Date(specificDate);
+      startOfDay.setHours(0, 0, 0, 0);
+
+      const endOfDay = new Date(specificDate);
+      endOfDay.setHours(23, 59, 59, 999);
+
+      countQuery.where('createdAt').gte(startOfDay).lte(endOfDay);
+    }
+
+    const count = await countQuery.countDocuments();
+
+    const pendingRequestsQuery = Application.find()
+        .populate('initiatedBy', 'email password isActive phone role'); // Select specific fields
+
+    // Apply the same date filter to the results query
+    if (specificDate) {
+      const startOfDay = new Date(specificDate);
+      startOfDay.setHours(0, 0, 0, 0);
+
+      const endOfDay = new Date(specificDate);
+      endOfDay.setHours(23, 59, 59, 999);
+
+      pendingRequestsQuery.where('createdAt').gte(startOfDay).lte(endOfDay);
+    }
+
+    const pendingRequests = await pendingRequestsQuery
+        .sort({ date: -1 }) // Sort by date in descending order
         .limit(ITEM_PER_PAGE)
         .skip(ITEM_PER_PAGE * (page - 1));
 
-    // Calculate the total amount
-    const totalAmount = pendingRequests.reduce((total, request) => {
-      return total + parseFloat(request.amount);
-    }, 0);
-
-    return { count, pendingRequests, totalAmount };
+    return { count, pendingRequests };
   } catch (err) {
     console.log(err);
     throw new Error("Failed to fetch Requests!");
@@ -86,13 +129,12 @@ export const fetchUser = async (id) => {
     throw new Error("Failed to fetch user!");
   }
 };
-export const fetchRequest = async (id) => {
+export const fetchApplication = async (id) => {
 
   try {
     connectToDB();
-    const request = await Withdrawal.findById(id)
-        .populate('requestedBy', 'email isActive phone role accounts') ;
-    console.log('request--',request)
+    const request = await Application.findById(id)
+        .populate('initiatedBy', 'email password isActive phone role');
     return request;
   } catch (err) {
     console.log(err);

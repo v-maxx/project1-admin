@@ -25,7 +25,7 @@ const menuItems = [
         icon: <MdDashboard />,
       },
       {
-        title: "Users",
+        title: "Volunteers",
         path: "/dashboard/users",
         icon: <MdSupervisedUserCircle />,
       },
@@ -39,15 +39,11 @@ const menuItems = [
       //   path: "/dashboard/products",
       //   icon: <MdShoppingBag />,
       // },
+
       {
-        title: "Links",
-        path: "/dashboard/links",
-        icon: <MdShoppingBag />,
-      },
-      {
-        title: "Withdrawals",
+        title: "Applications",
         icon: <MdAttachMoney />,
-        path: "/dashboard/withdraw-requests",
+        path: "/dashboard/applications",
         // sebMenu: [
         //   {
         //     title: "Pending",

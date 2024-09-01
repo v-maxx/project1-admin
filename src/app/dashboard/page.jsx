@@ -10,7 +10,7 @@ import Usersummry from "@/app/ui/dashboard/user-summry/usersummry";
 const Dashboard = async () => {
     // const q = searchParams?.q || "";
     // const page = searchParams?.page || 1;
-    const { count:linkCount, links } = await fetchLinks('', 1);
+    // const { count:linkCount, links } = await fetchLinks('', 1);
     const { count:userCount, users } = await fetchUsers('', 1);
 
   return (
@@ -18,8 +18,8 @@ const Dashboard = async () => {
       <div className={styles.main}>
         <div className={styles.cards}>
 
-            <Card count={userCount} type={'User'} />
-            <Card count={linkCount} type={'Link'} />
+            <Card count={userCount} type={'Volunteer'} />
+            {/*<Card count={linkCount} type={'Link'} />*/}
 
         </div>
         {/*<Transactions />*/}

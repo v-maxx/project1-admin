@@ -32,28 +32,28 @@ const AddUserPage = () => {
         <form onSubmit={handleAddUser} className={`${styles.form} grid grid-cols-2 gap-6`}>
           <div className={'flex justify-start items-center align-middle content-center gap-2 py-2'}>
             <label htmlFor="username">Username</label>
-            <input type="text" placeholder="username" name="username" id="username" required />
+            <input required={true} type="text" placeholder="username" name="username" id="username" />
           </div>
 
           <div className={'flex justify-start items-center align-middle content-center gap-2 py-2'}>
             <label htmlFor="email">Email</label>
-            <input type="email" placeholder="email" name="email" id="email" required />
+            <input required={true} type="email" placeholder="email" name="email" id="email" />
           </div>
 
           <div className={'flex justify-start items-center align-middle content-center gap-2 py-2'}>
             <label htmlFor="password">Password</label>
-            <input type="password" placeholder="password" name="password" id="password" required />
+            <input required={true} type="password" placeholder="password" name="password" id="password" />
           </div>
 
           <div className={'flex justify-start items-center align-middle content-center gap-2 py-2'}>
             <label htmlFor="phone">Phone</label>
-            <input type="phone" placeholder="phone" name="phone" id="phone" />
+            <input required={true} type="phone" placeholder="phone" name="phone" id="phone" />
           </div>
 
           <div className={'flex justify-start items-center align-middle content-center gap-2 py-2'}>
             <label htmlFor="role">Role</label>
-            <select defaultValue="User" name="role" id="role">
-              <option value="User">User</option>
+            <select defaultValue="Volunteer" name="role" id="role">
+              <option value="Volunteer">Volunteer</option>
             </select>
           </div>
 

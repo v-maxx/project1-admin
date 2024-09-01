@@ -1,127 +1,149 @@
-import mongoose from "mongoose";
-
-const userSchema = new mongoose.Schema(
-  {
-    username: {
-      type: String,
-      required: true,
-      unique: true,
-      min: 3,
-      max: 20,
-    },
-    email: {
-      type: String,
-      unique: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    img: {
-      type: String,
-    },
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
-      address:{
-        type: String,
-      },
-    phone: {
-      type: String,
-    },
-      role: { type: String, enum: ['Super admin', 'Admin', 'User'], default: 'User' },
-      accounts: [
-          {
-              bank: { type: String, required: true },
-              name: { type: String, required: true },
-              bankAccount: { type: String, required: true },
-              ifsc:{type: String, required: true}
-          }
-      ],
-      payout: {
-          pending: { type: Number, default: 0 },
-          available: { type: Number, default: 0 },
-          settled: { type: Number, default: 0 }
-      },
-      tasksCompleted: {
-          type: [
-              {
-                  taskId: {type: mongoose.Schema.Types.ObjectId, ref: 'Link'}, // Reference to a task
-                  amount: {type: Number, default: 0}, // Ensure amount is a number
-              }
-          ],
-          default: [],
-      }
-
-  },
-  { timestamps: true }
-);
+import mongoose, {Document, Schema} from "mongoose";
 
 
-const linksSchema = new mongoose.Schema(
+const UserSchema= new mongoose.Schema(
     {
-        url: {
+        username: {
             type: String,
-        },
-        reward: {
-            type: Number,
-            required: true,
-
-        },
-        uuid: {
-            type: String,
-            required: true,
+            required: [true, 'Username is required'],
             unique: true,
-            default: () => new mongoose.Types.ObjectId().toString(), // Generate a unique key
+            minlength: [3, 'Username must be at least 3 characters long'],
+            maxlength: [20, 'Username cannot be more than 20 characters long'],
+            trim: true, // Ensures no leading or trailing spaces
         },
-        isActive:{
+        email: {
+            type: String,
+            required: [true, 'Email is required'],
+            unique: true,
+            match: [
+                /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                'Please fill a valid email address',
+            ],
+        },
+        password: {
+            type: String,
+            required: [true, 'Password is required'],
+            minlength: [6, 'Password must be at least 6 characters long'],
+        },
+        isActive: {
             type: Boolean,
-            required: true,
-            default:true
+            default: true,
         },
-        completedBy:{
-            type: Array,
-            required: false,
-            default:[]
+        address: {
+            type: String,
+            trim: true, // Ensures no leading or trailing spaces
         },
-        user: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-            required: true,
+        phone: {
+            type: String,
+            match: [
+                /^[0-9]{10}$/,
+                'Please fill a valid phone number with 10 digits',
+            ],
         },
-
-
+        role: {
+            type: String,
+            enum: ['Super admin', 'Admin', 'Volunteer'],
+            default: 'Volunteer',
+        },
+        applicationsCompleted: {
+            type: Number,
+            default: 0,
+        },
     },
-    { timestamps: true, autoIndex: true}
+        { timestamps: true } // Adds createdAt and updatedAt timestamps
 );
-const withdrawalSchema = new mongoose.Schema(
+
+
+const ApplicationSchema= new mongoose.Schema(
     {
-        amount: {
+        name: {
             type: String,
+            required: [true, 'Name is required'],
+            trim: true,
         },
-        uuid: {
+        fatherName: {
             type: String,
-            required: true,
-            unique: true,
-            default: () => new mongoose.Types.ObjectId().toString(), // Generate a unique key
+            required: [true, "Father's name is required"],
+            trim: true,
         },
-        status:{ type: String, enum: ['Pending', 'Rejected', 'Completed'], default: 'Pending' },
-        requestedBy: {
+        documentType: {
+            type: String,
+            required: [true, 'Document type is required'],
+        },
+        documentNumber: {
+            type: String,
+            required: [true, 'Document number is required'],
+        },
+        mobile: {
+            type: String,
+            required: [true, 'Mobile number is required'],
+        },
+        verification: {
+            type: Boolean,
+            default: false,
+        },
+        address: {
+            type: String,
+            required: [true, 'Address is required'],
+        },
+        address1: {
+            type: String,
+            required: [false],
+        },
+        residenceType: {
+            type: String,
+            enum: ['Temporary', 'Permanent'],
+            required: [true, 'Residence type is required'],
+        },
+        occupation: {
+            type: String,
+            required: [true, 'Occupation is required'],
+        },
+        category: {
+            type: String,
+            enum: ['GEN', 'OBC', 'STSC'],
+            required: [true, 'Category is required'],
+        },
+        email: {
+            type: String,
+            required: [true, 'Email is required'],
+            match: [
+                /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                'Please fill a valid email address',
+            ],
+        },
+        frontPhoto: {
+            type: String,
+            required: [true, 'Front photo is required'],
+        },
+        backPhoto: {
+            type: String,
+            required: [false, 'Back photo is required'],
+        },
+        photo: {
+            type: String,
+            required: [true, 'Photo is required'],
+        },
+        status: {
+            type: String,
+            enum: ['Pending', 'Pending Payment', 'Completed'],
+            required: [true, 'Status is required'],
+        },
+        initiatedBy: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             required: true,
         },
-
-
     },
-    { timestamps: true, autoIndex: true}
-);
+    { timestamps: true }
+)
 
-export const User = mongoose.models.User || mongoose.model("User", userSchema);
+// Export the model with TypeScript support
+export const Application= mongoose.models.Application || mongoose.model('Application', ApplicationSchema);
 
-export const Link =
-  mongoose.models.Link || mongoose.model("Link", linksSchema);
 
-export const Withdrawal =
-  mongoose.models.Withdrawal || mongoose.model("Withdrawal", withdrawalSchema);
+
+
+
+export const User = mongoose.models.User || mongoose.model("User", UserSchema);
+

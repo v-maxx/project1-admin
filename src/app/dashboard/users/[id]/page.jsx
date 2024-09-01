@@ -50,7 +50,7 @@ const SingleUserPage = async ({ params }) => {
           <textarea type="text" name="address" placeholder={user.address} />
           <label>Role</label>
           <select name="role" id="role" defaultValue={user.role}>
-            <option value={'User'}>User</option>
+            <option value={'Volunteer'}>Volunteer</option>
             <option value={'Admin'}>Admin</option>
           </select>
           <label>Is Active?</label>

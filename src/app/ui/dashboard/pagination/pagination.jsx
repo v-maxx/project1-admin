@@ -24,7 +24,7 @@ const Pagination = ({ count }) => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={'w-full flex justify-between'}>
       <button
         className={`${styles.button} bg-purple-500 rounded-lg !px-3 !py-2`}
         disabled={!hasPrev}

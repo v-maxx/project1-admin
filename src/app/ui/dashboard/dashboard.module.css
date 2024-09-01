@@ -3,13 +3,14 @@
 }
 
 .menu {
+  width: 25%;
   flex: 1;
   background-color: var(--bgSoft);
   padding: 20px;
   min-height: 100vh;
 }
 
-.content {
+.content {width: 75%;
   flex: 4;
   padding: 20px;
 }
