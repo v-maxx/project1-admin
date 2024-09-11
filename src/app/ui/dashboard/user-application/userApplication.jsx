@@ -1,9 +1,10 @@
 import React from 'react';
 import { Avatar, Box, Card, CardContent, CardHeader, CardMedia, Typography } from '@mui/material';
 import Image from "next/image";
+import moment from "moment";
 
 const UserApplication = ({data}) => {
-    const { _id:id, name, fatherName, documentType, documentNumber, mobile, verification,
+    const { _id:id, name, fatherName, dob, documentType, documentNumber, mobile, verification,
         address, address1, residenceType, occupation, category, email, frontPhoto,
         backPhoto, photo, status, initiatedBy, createdAt, updatedAt}=data
     const formatDate = (dateString) => new Date(dateString).toLocaleString();
@@ -34,12 +35,38 @@ const UserApplication = ({data}) => {
                     {renderField("ID", id)}
                     {renderField("Name", name)}
                     {renderField("Father's Name", fatherName)}
+                    {renderField("Date of Birth", moment(dob).format("DD-MM-YYYY"))}
                     {renderField("Document Type", documentType)}
                     {renderField("Document Number", documentNumber)}
                     {renderField("Mobile", mobile)}
                     {renderField("Verification", verification ? 'Verified' :'Not verified')}
-                    {renderField("Address", address)}
-                    {renderField("Address 1", address1 ? address1 :'NA')}
+                    <Box>
+                        <h2 className={'font-bold px-4'}>Address</h2>
+                        <Box  display="grid" gridTemplateColumns="100% 100% 1fr" gap={3} mb={3}>
+                        {renderField("Street", address.street ? address.street :'NA')}
+                        {renderField("District", address.district ? address.district :'NA')}
+                        {renderField("City", address.city ? address.city :'NA')}
+                        {renderField("State", address.state ? address.state :'NA')}
+                            {renderField("Pin Code", address.pincode ? address.pincode : 'NA')}
+
+                        </Box>
+                    </Box>
+
+                    <Box >
+                        {address1.street &&
+                            <>
+                                <h2 className={'font-bold px-4'}>Permanent Address</h2>
+
+                                <Box display="grid" gridTemplateColumns="50% 1fr" gap={3} mb={3}>
+                                {renderField("Street", address1.street ? address1.street : 'NA')}
+                                {renderField("District", address1.district ? address1.district : 'NA')}
+                                {renderField("City", address1.city ? address1.city : 'NA')}
+                                {renderField("State", address1.state ? address1.state : 'NA')}
+                                {renderField("Pin Code", address1.pincode ? address1.pincode : 'NA')}
+
+                                </Box> </>}
+                    </Box>
+
                     {renderField("Residence Type", residenceType)}
                     {renderField("Occupation", occupation)}
                     {renderField("Category", category)}

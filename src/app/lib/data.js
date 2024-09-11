@@ -72,7 +72,7 @@ export const fetchApplications = async (page, specificDate) => {
     const pendingRequests = await pendingRequestsQuery
         .sort({ date: -1 }) // Sort by date in descending order
         .limit(ITEM_PER_PAGE)
-        .skip(ITEM_PER_PAGE * (page - 1));
+        .skip(ITEM_PER_PAGE * (page - 1)).sort({ updatedAt: -1 });
 
     return { count, pendingRequests };
   } catch (err) {

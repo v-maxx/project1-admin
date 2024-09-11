@@ -66,6 +66,11 @@ const ApplicationSchema= new mongoose.Schema(
             required: [true, "Father's name is required"],
             trim: true,
         },
+        dob: {
+            type: String,
+            required: [true, "DOB is required"],
+            trim: true,
+        },
         documentType: {
             type: String,
             required: [true, 'Document type is required'],
@@ -83,12 +88,50 @@ const ApplicationSchema= new mongoose.Schema(
             default: false,
         },
         address: {
-            type: String,
-            required: [true, 'Address is required'],
+            street: {
+                type: String,
+                required: [true, 'Street is required'],
+            },
+            district: {
+                type: String,
+                required: [true, 'District is required'],
+            },
+            city: {
+                type: String,
+                required: [true, 'City is required'],
+            },
+            state: {
+                type: String,
+                required: [true, 'State is required'],
+            },
+            pincode: {
+                type: String,
+                required: [true, 'Pincode is required'],
+                match: [/^\d{6}$/, 'Pincode must be exactly 6 digits'], // Validation for 6 digits
+            }
         },
         address1: {
-            type: String,
-            required: [false],
+            street: {
+                type: String,
+                required: [false, 'Street is required'],
+            },
+            district: {
+                type: String,
+                required: [false, 'District is required'],
+            },
+            city: {
+                type: String,
+                required: [false, 'City is required'],
+            },
+            state: {
+                type: String,
+                required: [false, 'State is required'],
+            },
+            pincode: {
+                type: String,
+                required: [false, 'Pincode is required'],
+                match: [/^\d{6}$/, 'Pincode must be exactly 6 digits'], // Validation for 6 digits
+            }
         },
         residenceType: {
             type: String,
@@ -101,12 +144,12 @@ const ApplicationSchema= new mongoose.Schema(
         },
         category: {
             type: String,
-            enum: ['GEN', 'OBC', 'STSC'],
+            enum: ['GEN', 'OBC', 'ST','SC'],
             required: [true, 'Category is required'],
         },
         email: {
             type: String,
-            required: [true, 'Email is required'],
+            required: [false, 'Email is required'],
             match: [
                 /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                 'Please fill a valid email address',
