@@ -4,7 +4,7 @@ import Image from "next/image";
 import moment from "moment";
 
 const UserApplication = ({data}) => {
-    const { _id:id, name, fatherName, dob, documentType, documentNumber, mobile, verification,
+    const { _id:id, name, fatherName, dob,age, documentType, documentNumber, mobile, verification,
         address, address1, residenceType, occupation, category, email, frontPhoto,
         backPhoto, photo, status, initiatedBy, createdAt, updatedAt}=data
     const formatDate = (dateString) => new Date(dateString).toLocaleString();
@@ -36,6 +36,7 @@ const UserApplication = ({data}) => {
                     {renderField("Name", name)}
                     {renderField("Father's Name", fatherName)}
                     {renderField("Date of Birth", moment(dob).format("DD-MM-YYYY"))}
+                    {renderField("Age (when application filled)", age)}
                     {renderField("Document Type", documentType)}
                     {renderField("Document Number", documentNumber)}
                     {renderField("Mobile", mobile)}

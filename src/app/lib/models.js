@@ -71,6 +71,11 @@ const ApplicationSchema= new mongoose.Schema(
             required: [true, "DOB is required"],
             trim: true,
         },
+        age: {
+            type: String,
+            required: [true, "Age is required"],
+            trim: true,
+        },
         documentType: {
             type: String,
             required: [true, 'Document type is required'],
